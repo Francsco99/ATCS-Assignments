@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single | Movie Recommendation System</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <a id="homeLink" href="/">Home</a>
+    <h1 id="title">Movie Recommendation System</h1>
+    <div id="container">
+        <div id="formContainer">
+            <form id="userForm">
+                <label for="userId">Choose a user to visualize the suggestions for:</label>
+                <input type="number" id="userId" name="userId" min="{{ min_user_id }}" max="{{ max_user_id }}" required>
+                <label for="topKMovies">Select how many suggestions do you want to see:</label>
+                <input type="number" id="topKMovies" name="topKMovies" value="10" min="1" required>
+                <label for="topKNeighbors">Select how many neighbors do you want to consider for the suggestions:</label>
+                <input type="number" id="topKNeighbors" name="topKNeighbors" value="40" min="1" required>
+                <label for="similarityType">Select similarity type:</label>
+                <select id="similarityType" name="similarityType" required>
+                    <option value="pearson">Pearson</option>
+                    <option value="cosine">Cosine</option>
+                    <option value="jaccard">Jaccard</option>
+                    <option value="constrPearson">Constrained Pearson</option>
+                    <!--<option value="jaccard-pearson">Jaccard-Pearson</option>-->
+                    <!--<option value="jaccard-constrPearson">Jaccard-Constrained-->
+                </select>
+                <button type="submit" id="getRecommendationsButton">Get Recommendations</button>
+                <button type="button" id="showSimilarUsersButton">Top 10 Similar Users</button>
+                <button type="button" id="showTopMoviesButton">Top 10 Movies Rated by User</button>
+                <button type="button" id="clearResultsButton">Clear Results</button>
+            </form>
+        </div>
+        <div id="loading">Loading... (May take a while)</div>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            if (!validateForm(formData)) {
+                return; // Se il form non è valido, esce dalla funzione
+            }
+            disableButtons();
+            showLoading();
+            fetch('/recommendations?' + new URLSearchParams(formData))
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading();
+                    enableButtons();
+                    showResults(data);
+                });
+        });
+    
+        // Clear the results when the "Clear Results" button is clicked
+        document.getElementById('clearResultsButton').addEventListener('click', function() {
+            clearResults();
+        });
+    
+        // Show top 10 movies when the "Show Top 10 Movies" button is clicked
+        document.getElementById('showTopMoviesButton').addEventListener('click', function() {
+            const userId = document.getElementById('userId').value;
+            showLoading();
+            disableButtons();
+            fetch(`/top_rated_movies?userId=${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading();
+                    enableButtons();
+                    showTopMovies(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching top rated movies:', error);
+                    hideLoading();
+                    enableButtons();
+                });
+        });
+
+        // Show top 10 similar users when the "Show Top 10 Similar Users" button is clicked
+        document.getElementById('showSimilarUsersButton').addEventListener('click', function() {
+            const userId = document.getElementById('userId').value;
+            const simValue = document.getElementById('similarityType').value;
+            showLoading();
+            disableButtons();
+            fetch(`/top_similar_users?userId=${userId}&similarityType=${simValue}`)
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading();
+                    enableButtons();
+                    showTopUsers(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching top similar users:',error);
+                    hideLoading();
+                    enableButtons();
+                });
+        });
+    
+        function disableButtons() {
+            document.getElementById('getRecommendationsButton').setAttribute('disabled', true);
+            document.getElementById('clearResultsButton').setAttribute('disabled', true);
+            document.getElementById('showTopMoviesButton').setAttribute('disabled', true);
+            document.getElementById('showSimilarUsersButton').setAttribute('disabled', true);
+        }
+
+        function enableButtons() {
+            document.getElementById('getRecommendationsButton').removeAttribute('disabled');
+            document.getElementById('clearResultsButton').removeAttribute('disabled');
+            document.getElementById('showTopMoviesButton').removeAttribute('disabled');
+            document.getElementById('showSimilarUsersButton').removeAttribute('disabled');
+        }
+
+        function validateForm(formData) {
+            // Controllo se i campi hanno valori validi
+            const userId = formData.get('userId');
+            const topKMovies = formData.get('topKMovies');
+            const topKNeighbors = formData.get('topKNeighbors');
+            const similarityType = formData.get('similarityType');
+            if (!userId || !topKMovies || !topKNeighbors || !similarityType) {
+                alert('Please fill in all the required fields.');
+                return false;
+            }
+            return true;
+        }
+
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').innerHTML = '';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+
+        function showResults(data) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<h2>Recommendations</h2><ol>';
+            Object.entries(data).forEach(([movie, rating], index) => {
+                const li = document.createElement('li');
+                li.textContent = `${movie}: ${rating}`;
+                if (index < 3) {
+                    li.style.fontWeight = 'bold';
+                }
+                resultsDiv.appendChild(li);
+            });
+            resultsDiv.innerHTML += '</ol>';
+        }
+
+        function showTopMovies(data) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<h2>Top 10 Movies</h2><ol>';
+            if (Object.keys(data).length === 0) {
+            resultsDiv.innerHTML += '<p>No rated movies found for this user.</p>';
+            } else {
+                Object.entries(data).forEach(([movie, rating]) => {
+                const li = document.createElement('li');
+                li.textContent = `${movie}: ${rating} stars`;
+                resultsDiv.appendChild(li);
+                });
+                }
+                resultsDiv.innerHTML += '</ol>';
+            }
+
+        function showTopUsers(data) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<h2>Top 10 Similar Users</h2><ol>';
+            if (Object.keys(data).length === 0) {
+            resultsDiv.innerHTML += '<p>No similar users found for this user.</p>';
+            } else {
+                Object.entries(data).forEach(([user, similarity]) => {
+                const li = document.createElement('li');
+                li.textContent = `${user}: ${similarity}`;
+                resultsDiv.appendChild(li);
+                });
+                }
+                resultsDiv.innerHTML += '</ol>';
+            }
+    </script>
+    
+</body>
+</html>

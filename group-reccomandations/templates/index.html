@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Movie Recommendation System</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    
+    <h1 id="title">Movie Recommendation System</h1>
+    <div id="description">
+        <ul>
+            <li>
+                <h3>Assignment 1</h3>
+                <p>User-based Collaborative Filtering Recommendations - The goal of the first assignment is to implement a user-based collaborative filtering approach.</p>
+                
+            </li>
+            
+            <li>
+                <h3>Assignment 2</h3>
+                <p>Group Recommendations - The goal of the second assignment is to implement existing approaches for producing group recommendations and propose your own ideas and implement them for the same topic.</p>
+            </li>
+        </ul>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/single_recommendations">Single Recommendations</a></li>
+            <li><a href="/group_recommendations">Group Recommendations</a></li>
+        </ul>
+    </nav>
+</body>
+</html>

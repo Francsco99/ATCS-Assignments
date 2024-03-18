@@ -1,0 +1,106 @@
+body {
+    font-family: "Helvetica", sans-serif;
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+}
+#title {
+    text-align: center;
+    background-color: #3498db;
+    color: white;
+    padding: 20px;
+    margin-top: 0;
+}
+#container {
+    display: flex;
+    margin-left: 10px;
+}
+#formContainer {
+    flex: 1;
+    
+}
+#results {
+    flex: 1;
+    margin-right: 10px;
+}
+#formContainer label,
+#formContainer input,
+#formContainer button {
+    display: block;
+    margin-bottom: 15px;
+    width: 75%;
+    box-sizing: border-box;
+}
+
+
+#formContainer button {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 20px;
+}
+#clearResultsButton {
+    padding: 10px;
+    font-size: 20px;
+    
+}
+#results ol {
+    list-style-type: decimal;
+    padding-left: 0;
+}
+#results ol li {
+    margin-bottom: 30px; /* Aumentiamo lo spazio tra gli elementi */
+}
+#results ol li:nth-child(-n+3) {
+    font-weight: bold;
+}
+#loading {
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+}
+
+#homeLink {
+    position: absolute;
+    text-decoration: underline;
+    margin-top: 30px;
+    margin-left: 30px;
+    color: #ffffff; /* Colore del testo */
+    display: flex;
+    align-items: center;
+}
+nav {
+    text-align: center; /* Centra i link orizzontalmente */
+    margin-bottom: 20px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* Imposta il layout orizzontale */
+    justify-content: center; /* Centra i link orizzontalmente */
+}
+
+nav ul li {
+    margin-right: 20px; /* Aggiunge spazio tra i link */
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: black;
+    padding: 15px 20px; /* Aggiunge spazio attorno al testo */
+    border: 1px solid black; /* Aggiunge un bordo per evidenziare l'area cliccabile */
+    border-radius: 10px; /* Arrotonda gli angoli */
+    font-size: 30px; /* Dimensione del testo */
+    display: inline-block; /* Per rendere tutti i pulsanti della stessa larghezza */
+}
+
+nav ul li a:hover {
+    background-color: #f0f0f0; /* Cambia il colore di sfondo al passaggio del mouse */
+}
+
+#description {
+    text-align: left;
+    margin-bottom: 50px;
+
+}

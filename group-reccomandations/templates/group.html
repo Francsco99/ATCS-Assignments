@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group | Movie Recommendation System</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <a id="homeLink" href="/">Home</a>
+    <h1 id="title">Movie Recommendation System</h1>
+    <div id="container">
+        <div id="formContainer">
+            <form id="userForm">
+                <label for="userId1">Choose three users to visualize the suggestions for:</label>
+                <input type="number" id="userId1" name="userId1" min="{{ min_user_id }}" max="{{ max_user_id }}" required>
+                <input type="number" id="userId2" name="userId2" min="{{ min_user_id }}" max="{{ max_user_id }}" required>
+                <input type="number" id="userId3" name="userId3" min="{{ min_user_id }}" max="{{ max_user_id }}" required>
+                <label for="topKMovies">Select how many suggestions do you want to see:</label>
+                <input type="number" id="topKMovies" name="topKMovies" value="10" min="1" required>
+                <label for="topKNeighbors">Select how many neighbors do you want to consider for the suggestions:</label>
+                <input type="number" id="topKNeighbors" name="topKNeighbors" value="40" min="1" required>
+                <label for="number">Select the weight of the disagreement:</label>
+                <input type="number" id = "weight" name="weight" value ="0.4" min="0.1" step="0.1" required>
+                <label for="similarityType">Select similarity type:</label>
+                <select id="similarityType" name="similarityType" required>
+                    <option value="pearson">Pearson</option>
+                    <option value="cosine">Cosine</option>
+                    <option value="jaccard">Jaccard</option>
+                    <option value="constrPearson">Constrained Pearson</option>
+                    <!--<option value="jaccard-pearson">Jaccard-Pearson</option>-->
+                    <!--<option value="jaccard-constrPearson">Jaccard-Constrained-->
+                </select>
+                <br>
+                <label for="groupType">Select group aggregation type:</label>
+                <select id="groupType" name="groupType" required>
+                    <option value="average">Average</option>
+                    <option value="leastMisery">Least Misery</option>
+                    <option value="AverageDisagreement">Average + Disagreement</option>
+                </select>
+                <button type="submit" id="getRecommendationsButton">Get Group Recommendations</button>
+                <button type="button" id="clearResultsButton">Clear Results</button>
+            </form>
+        </div>
+        <div id="loading">Loading... (May take a while)</div>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            if (!validateForm(formData)) {
+                return; // Se il form non è valido, esce dalla funzione
+            }
+            disableButtons();
+            showLoading();
+            fetch('/group-recommendations?' + new URLSearchParams(formData))
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading();
+                    enableButtons();
+                    showResults(data);
+                });
+        });
+    
+        // Clear the results when the "Clear Results" button is clicked
+        document.getElementById('clearResultsButton').addEventListener('click', function() {
+            clearResults();
+        });
+    
+        function disableButtons() {
+            document.getElementById('getRecommendationsButton').setAttribute('disabled', true);
+            document.getElementById('clearResultsButton').setAttribute('disabled', true);
+        }
+
+        function enableButtons() {
+            document.getElementById('getRecommendationsButton').removeAttribute('disabled');
+            document.getElementById('clearResultsButton').removeAttribute('disabled');
+        }
+
+        function validateForm(formData) {
+            // Check if the fields have valid values
+            const userId1 = formData.get('userId1');
+            const userId2 = formData.get('userId2');
+            const userId3 = formData.get('userId3');
+            const topKMovies = formData.get('topKMovies');
+            const topKNeighbors = formData.get('topKNeighbors');
+            const similarityType = formData.get('similarityType');
+            const groupType = formData.get('groupType')
+            const weight = formData.get('weight')
+            if (userId1==userId2 || userId1==userId3 || userId2==userId3){
+                alert('Please insert three different user ids')
+                return false;
+            }
+            if (!userId1 || !userId2 || !userId3 || !topKMovies || !topKNeighbors || !similarityType || !groupType || !weight) {
+                alert('Please fill in all the required fields.');
+                return false;
+            }
+            return true;
+        }
+
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').innerHTML = '';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+
+        function showResults(data) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<h2>Recommendations</h2><ol>';
+            Object.entries(data).forEach(([movie, rating], index) => {
+                const li = document.createElement('li');
+                li.textContent = `${movie}: ${rating}`;
+                if (index < 3) {
+                    li.style.fontWeight = 'bold';
+                }
+                resultsDiv.appendChild(li);
+            });
+            resultsDiv.innerHTML += '</ol>';
+        }
+    </script>
+    
+</body>
+</html>
