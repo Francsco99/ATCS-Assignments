@@ -6,8 +6,8 @@ import os
 app = Flask(__name__,static_folder='static')
 
 absPath = os.path.dirname(os.path.abspath(__file__))
-datasetPath = os.path.join(absPath,"ml-latest-small")
-matricesPath = os.path.join(absPath,"matrices")
+datasetPath = os.path.join(absPath,"data","ml-latest-small")
+matricesPath = os.path.join(absPath,"data","matrices")
 userRatingsPath = os.path.join(datasetPath,"ratings.csv")
 moviesPath = os.path.join(datasetPath,"movies.csv")
 
@@ -24,6 +24,7 @@ def get_sim_matrix(sim_type):
     JaccardMatrixPath =os.path.join(matricesPath,"jaccard.csv")
     CosineMatrixPath=os.path.join(matricesPath,"cosine.csv")
     ConstrPearsonMatrixPath=os.path.join(matricesPath,"constr-pearson.csv")
+    JaccardConstrPearsonMatrixPath=os.path.join(matricesPath,"jac-constr-pearson.csv")
 
     if sim_type == "pearson":
         similarity_matrix_path = PearsonMatrixPath
@@ -33,6 +34,8 @@ def get_sim_matrix(sim_type):
         similarity_matrix_path = JaccardMatrixPath
     elif sim_type == "constrPearson":
         similarity_matrix_path = ConstrPearsonMatrixPath
+    elif sim_type == "jaccard-constrPearson":
+        similarity_matrix_path = JaccardConstrPearsonMatrixPath
     else:
         print("Error: Unsupported similarity type")
         return None
