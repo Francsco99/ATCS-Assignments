@@ -10,8 +10,6 @@ This project implements a group recommendation system using user-based collabora
   - [Web Application](#web-application)
 - [File Description](#file-description)
 - [Dependencies](#dependencies)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Installation
 
@@ -45,15 +43,9 @@ This will start a web application on localhost port 5000. Open a web browser and
 
 - `demo.py`: Script to run the group recommendation system via command line.
 - `webapp.py`: Script to start a web application for the recommendation system.
+- `recommender_system.py`: Contains the similarity and score prediction functions for user-based recommendation system.
+- `group_recommendations.py`: Contains the functions for group-based recommendation system.
 
 ## Dependencies
 
 The project dependencies are listed in the `requirements.txt` file.
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-## License
-
-This project is distributed under the MIT License. See the `LICENSE` file for more information.
