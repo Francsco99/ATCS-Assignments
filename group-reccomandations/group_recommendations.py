@@ -81,8 +81,8 @@ def extract_and_predict_ratings(ratings_df, sim_matrix, output_file, user_ids,k_
 
     # Make predictions for the group
     predictions = predict_group_ratings(ratings_df, sim_matrix, user_ids,k_neighbors)
-    for pred in predictions:
-        normalize_predictions(predictions[pred])
+    #for pred in predictions:
+        #normalize_predictions(predictions[pred])
     # Add predictions to the filtered DataFrame
     for user, suggestion in predictions.items():
         for movie_id, rating in suggestion.items():
