@@ -87,7 +87,7 @@ def recommendations():
     top_k_neighbors = int(request.args.get('topKNeighbors'))
     sim_type = str(request.args.get("similarityType"))
     sim_matrix = get_sim_matrix(sim_type)
-    predictions=rs.top_k_suggestions_matrix(ratings_data,movies_data,sim_matrix,user_id,top_k_neighbors,top_k_movies)
+    predictions=rs.top_k_suggestions_matrix_names(ratings_data,movies_data,sim_matrix,user_id,top_k_neighbors,top_k_movies)
     return jsonify(predictions)
 
 @app.route('/top_rated_movies')

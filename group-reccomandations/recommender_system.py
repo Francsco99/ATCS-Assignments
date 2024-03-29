@@ -385,7 +385,7 @@ def predict_single_rating(ratings_df, movie, user_a, neighbors, means):
             avg_b = means[user_b]
             #Update sums
             numerator_sum += similarity * (rating_b - avg_b)
-            denominator_sum += similarity
+            denominator_sum += abs(similarity)
     
     if denominator_sum != 0:
         return avg_a + (numerator_sum / denominator_sum)
@@ -470,7 +470,7 @@ def get_user_similarity_from_matrix(user_id,similarity_matrix,k):
     del user_similarity_dict["Unnamed: 0"]
     user_similarity_dict = {int(k): v for k, v in user_similarity_dict.items()}
     del user_similarity_dict[user_id]
-    sorted_similarity = sorted(user_similarity_dict.items(), key=lambda item: item[1], reverse=True)
+    sorted_similarity = sorted(user_similarity_dict.items(), key=lambda item: abs(item[1]), reverse=True)
     if k is not None:
         return dict(sorted_similarity[:k])
     else:
@@ -505,7 +505,7 @@ def all_suggestions_sim_matrix(ratings_df, similarity_matrix, user_a, k_neighbor
     sorted_suggestions = dict(sorted(suggestions.items(), key=lambda x: x[1], reverse=True))
     return sorted_suggestions
 
-def top_k_suggestions_matrix(ratings_df,movies_df, similarity_matrix, user_a, k_neighbors,k_movies):
+def top_k_suggestions_matrix_names(ratings_df,movies_df, similarity_matrix, user_a, k_neighbors,k_movies):
     means = mean_ratings(ratings_df)
     #find the top k_neighbors similar users of user_a
     neighbors = get_user_similarity_from_matrix(user_a,similarity_matrix,k_neighbors)
@@ -524,6 +524,21 @@ def top_k_suggestions_matrix(ratings_df,movies_df, similarity_matrix, user_a, k_
         suggestions_names[movie_name]=rating
     suggested_movies_names = dict(sorted(suggestions_names.items(), key=lambda x: x[1], reverse=True)[:k_movies])
     return suggested_movies_names
+
+def top_k_suggestions_matrix(ratings_df, similarity_matrix, user_a, k_neighbors,k_movies):
+    means = mean_ratings(ratings_df)
+    #find the top k_neighbors similar users of user_a
+    neighbors = get_user_similarity_from_matrix(user_a,similarity_matrix,k_neighbors)
+    #find the movies that user_a has not seen but his neighbors have seen
+    unwatched = find_movies_not_seen_by_user(ratings_df,user_a,neighbors)
+
+    suggestions={} #dict to store the suggestions 
+    
+    #Iterate on all the movies not seen by user_a and predict a score 
+    for movie in unwatched:
+        suggestions[movie] = predict_single_rating(ratings_df,movie,user_a,neighbors,means)
+    sorted_suggestions = dict(sorted(suggestions.items(), key=lambda x: x[1], reverse=True)[:k_movies])
+    return sorted_suggestions
 
 def calculate_user_similarity_matrix(ratings_df):
     # Get all unique user IDs
