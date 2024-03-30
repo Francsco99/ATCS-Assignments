@@ -2,7 +2,7 @@ import pandas as pd
 import recommender as rc
 import time
 import pandas as pd
-import plots as pt
+import numpy as np
 
 def single_user_satisfaction(user,df,group_predictions):
     """
@@ -91,12 +91,25 @@ def process_df(df):
     pivot_df.dropna(inplace=True)
     return pivot_df
 
-def save_to_csv(group,group_sat,path):
-
-    df = pd.DataFrame(group_sat)
+def save_to_csv(group,all_users_sat,path):
+    group_dis = {}
+    group_sat = {}
+    iterations = list(all_users_sat.keys())
+    for k,v in all_users_sat.items():
+        group_dis[k]=group_disagreement(v)
+        group_sat[k]=np.mean(v)
+    
+    df = pd.DataFrame(all_users_sat)
 
     df=df.T
     df.columns = group
+
+    df.insert(0, 'iteration', iterations)
+    # Add 'group_sat' column
+    df['group_sat'] = pd.Series(group_sat)
+    
+    # Add 'group_dis' column
+    df['group_dis'] = pd.Series(group_dis)
 
     # Save the DataFrame to a CSV file
     df.to_csv(path, index=False)
