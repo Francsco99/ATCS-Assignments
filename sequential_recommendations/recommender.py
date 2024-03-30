@@ -87,7 +87,7 @@ def get_recommended_items(df, user, neighbors, size=None):
 
 #aggiungi gli score predetti a quelli votati dall'utente
 def enrich_dataset(df,user):
-    neighbors = get_neighbors(df,user,75,pearson_similarity)
+    neighbors = get_neighbors(df,user,40,pearson_similarity)
     user_ratings = df[df['userId'] == user][['userId','movieId', 'rating']]
     predictions = get_recommended_items(df,user,neighbors)
     pred_df = pd.DataFrame({
