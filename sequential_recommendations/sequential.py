@@ -169,9 +169,3 @@ def sequential_recommender(group,iterations,df,top_k):
         print("Ending iteration",j)
         print("Time elapsed:",time.time()-current_time,"seconds\n")
     return all_users_sat
-
-df = rc.open_file('group-reccomandations/data/ml-latest-small/ratings.csv')
-group=[23,88,530]
-#group_sat=sequential_recommender(group,5,df,10)
-#save_to_csv(group,group_sat,"group-reccomandations/data/csv/out.csv")
-pt.plot_sat_scores_from_csv('group-reccomandations/data/csv/out.csv')
