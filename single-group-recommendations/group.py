@@ -1,5 +1,5 @@
-import recommender_system
 import itertools
+
 
 def common_movies_in_group(filtered_df,group):
     """

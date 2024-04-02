@@ -1,5 +1,5 @@
-import group_recommendations as gr
-import recommender_system as rs
+import group as gr
+import single as rs
 import os
 
 """File paths"""

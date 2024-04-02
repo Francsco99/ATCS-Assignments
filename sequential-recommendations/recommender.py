@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import heapq
-import time
 
 def open_file(path):
     return pd.read_csv(path)
@@ -108,14 +107,6 @@ def enrich_group_dataset(df,group):
         user_ratings = enrich_dataset(df,user)
         final_df = pd.concat([final_df,user_ratings],ignore_index=True)
     return final_df
-# print("inizio")
-# ratings_df = open_file('group-reccomandations/data/ml-latest-small/ratings.csv')
-# group=[1,2]
-# final= enrich_group_dataset(ratings_df,group)
-# df_proc= final.groupby('movieId')['rating'].agg(['mean', 'min']).reset_index()
-# print(df_proc)
-# final.to_csv("group-reccomandations/data/csv/final.csv")
-# df_proc.to_csv("group-reccomandations/data/csv/df_proc.csv")
 
 
 
