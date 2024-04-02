@@ -60,24 +60,24 @@ def group_disagreement(all_users_sat):
     """
     return max(all_users_sat)-min(all_users_sat)
 
-def new_alpha_disagreement(all_users_sat):
+def sigma_median_disagreement(satisfactions):
     """
     Obtain the new value for the "alpha" parameter by considering the Disagreements between the Satisfactions of the Users in the Group.
 
     Parameters:
-    - all_users_sat (list): A list of Satisfactions of the Users in the Group, computed for the current iteration.
+    - satisfactions (list): A list containing the satisfactions of the users in the group, computed for the current iteration.
     """
-    values = all_users_sat
+    values = np.array(satisfactions)
 
     value_pairs = list(combinations(values, 2))  # Pairs: (Satisfaction User_i, Satisfaction User_j)
     disagreements = np.zeros(len(value_pairs))
 
     for i, pair in enumerate(value_pairs):
-        # disagreement(User_i, User_j) = |Satisfaction User_i - Satisfaction User_j|
-        disagreements[i] = np.abs(pair[0] - pair[1])
+        # disagreement(User_i, User_j) = (Satisfaction User_i - Satisfaction User_j)^2
+        disagreements[i] = (pair[0] - pair[1])**2
     
     disagreement_pairs = list(combinations(disagreements, 2))   # Pairs: (Disagreement UserPair_k, Disagreement UserPair_l)
-    averages = np.zeros(len(values))
+    averages = np.zeros(len(value_pairs))
     for i, pair in enumerate(disagreement_pairs):
         averages[i] = np.mean(pair) # For each pair of disagreements, we compute the average
     
@@ -200,7 +200,7 @@ def sequential_recommender(group,iterations,df,top_k):
         users_sat = all_users_satisfactions(group,users_ratings_df,dict(list(group_predictions.items())[:30]))
         all_users_sat[j]=users_sat
         print("Group satisfactions for iter.",j,users_sat)
-        alpha = new_alpha_disagreement(users_sat)
+        alpha = sigma_median_disagreement(users_sat)
         print("Group disagreement for iter.",j,alpha)
         print("Updating users ratings...")
         users_ratings_df = update_users_ratings(users_ratings_df,top_k_group_predictions)

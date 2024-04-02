@@ -1,10 +1,9 @@
 import pandas as pd
 import numpy as np
-import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
-def plot_subgraphs(csv_file):
+def plot_subgraphs(csv_file,out_path):
     # Carica i dati dal CSV
     data = pd.read_csv(csv_file)
 
@@ -54,9 +53,13 @@ def plot_subgraphs(csv_file):
         # Aggiungi una griglia sull'asse y
         ax.grid(axis='y', linestyle='--', alpha=0.8)
 
-    plt.savefig("group-reccomandations/data/graphs/sat-plot.png")
+    plot_dir = os.path.dirname(out_path)
+    if not os.path.exists(plot_dir):
+        os.makedirs(plot_dir)
 
-def plot_group_scores(csv_file):
+    plt.savefig(out_path)
+
+def plot_group_scores(csv_file,out_path):
     # Lettura dei dati dal file CSV utilizzando pandas
     data = pd.read_csv(csv_file)
 
@@ -71,7 +74,7 @@ def plot_group_scores(csv_file):
     plt.xticks(data['iteration'])
     plt.yticks([i/10 for i in range(11)])  # Valori da 0 a 1 con passo di 0.1
     # Aggiunta di titoli e label agli assi
-    plt.title('Group Satisfaction and Disagreement over Iterations')
+    #plt.title('Group Satisfaction and Disagreement over Iterations')
     plt.xlabel('Iterations')
     plt.ylabel('Score')
 
@@ -80,5 +83,7 @@ def plot_group_scores(csv_file):
 
     # Mostra leggenda in alto a destra
     plt.legend()
-
-    plt.savefig("group-reccomandations/data/graphs/dis-sat-plot.png")
+    plot_dir = os.path.dirname(out_path)
+    if not os.path.exists(plot_dir):
+        os.makedirs(plot_dir)
+    plt.savefig(out_path)

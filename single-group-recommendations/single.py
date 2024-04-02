@@ -157,8 +157,8 @@ def pearson_similarity(ratings_df,user_a,user_b,means):
     """
     #find the common movies i.e. the movies rated by both users
     common_movies = find_common_movies(ratings_df,user_a,user_b)
-    if not common_movies:
-        return -1
+    if not common_movies or len(common_movies)<5:
+        return 0
     
     #Calculate averages for each user
     mean_a = means[user_a]
@@ -543,7 +543,7 @@ def top_k_suggestions_matrix(ratings_df, similarity_matrix, user_a, k_neighbors,
 def calculate_user_similarity_matrix(ratings_df):
     # Get all unique user IDs
     users = ratings_df['userId'].unique()
-    medians = median_ratings(ratings_df)
+    means = mean_ratings(ratings_df)
     # Initialize an empty DataFrame to store user similarities
     similarity_matrix = pd.DataFrame(index=users, columns=users)
 
@@ -551,7 +551,7 @@ def calculate_user_similarity_matrix(ratings_df):
     for i, user_a in enumerate(users):
         for j, user_b in enumerate(users):
             if j >= i:  # Avoid calculating similarity for the same pair twice (symmetric matrix)
-                similarity = jaccard_constrained_pearson_similarity(ratings_df, user_a, user_b,medians)
+                similarity = pearson_similarity(ratings_df,user_a,user_b,means)
                 similarity_matrix.at[user_a, user_b] = similarity
                 similarity_matrix.at[user_b, user_a] = similarity
 
