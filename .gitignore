@@ -1,5 +1,7 @@
-group-reccomandations/group_recommendations_test.py
-group-reccomandations/recommender_system_test.py
 .DS_Store
 data/plots
 data/csv
+sequential-recommendations/test.py
+sequential-recommendations/__pycache__
+single-group-recommendations/__pycache__
+webapp/__pycache__
