@@ -1,0 +1,6 @@
+data/csv
+data/plots
+single-group-recommendations/__pycache__
+webapp/__pycache__
+sequential-recommendations/__pycache__
+sequential-recommendations/test.py
