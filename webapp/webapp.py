@@ -1,6 +1,6 @@
 from flask import Flask,render_template, request, jsonify
-import recommender_system as rs
-import group_recommendations as rg
+import single as sr
+import group as gr
 import os
 
 app = Flask(__name__,static_folder='static')

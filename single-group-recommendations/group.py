@@ -1,5 +1,5 @@
 import itertools
-
+import single
 
 def common_movies_in_group(filtered_df,group):
     """
@@ -37,7 +37,7 @@ def predict_group_ratings(ratings_df, sim_matrix, group,k_neighbors):
     """
     predictions = {}
     for user in group:
-        predictions[user] = recommender_system.all_suggestions_sim_matrix(ratings_df, sim_matrix, user, k_neighbors)
+        predictions[user] = single.all_suggestions_sim_matrix(ratings_df, sim_matrix, user, k_neighbors)
     return predictions
 
 def normalize_predictions(user_predictions):

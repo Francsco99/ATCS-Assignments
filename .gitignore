@@ -1,3 +1,5 @@
 group-reccomandations/group_recommendations_test.py
 group-reccomandations/recommender_system_test.py
 .DS_Store
+data/plots
+data/csv

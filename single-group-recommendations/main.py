@@ -4,14 +4,12 @@ import os
 
 """File paths"""
 absPath = os.path.dirname(os.path.abspath(__file__))
-datasetPath = os.path.join(absPath,"data","ml-latest-small")
-matricesPath = os.path.join(absPath,"data","matrices")
+
+datasetPath = os.path.join("data","ml-latest-small")
+matricesPath = os.path.join("data","matrices")
 userRatingsPath = os.path.join(datasetPath,"ratings.csv")
 moviesPath = os.path.join(datasetPath,"movies.csv")
 PearsonMatrixPath = os.path.join(matricesPath,"pearson.csv")
-JaccardMatrixPath =os.path.join(matricesPath,"jaccard.csv")
-CosineMatrixPath=os.path.join(matricesPath,"cosine.csv")
-ConstrPearsonMatrixPath=os.path.join(matricesPath,"constr-pearson.csv")
 JaccardConstrPearsonMatrixPath=os.path.join(matricesPath,"jac-constr-pearson.csv")
 
 """Data loading"""
@@ -23,9 +21,6 @@ medians = rs.median_ratings(ratings_df)
 
 #Similarity matrices
 pearson_matrix = rs.load_data(PearsonMatrixPath)
-jaccard_matrix = rs.load_data(JaccardMatrixPath)
-cosine_matrix = rs.load_data(CosineMatrixPath)
-constr_pearson_matrix = rs.load_data(ConstrPearsonMatrixPath)
 jac_constr_pearson_matrix = rs.load_data(JaccardConstrPearsonMatrixPath)
 
 def print_result(result):
