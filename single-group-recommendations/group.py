@@ -1,6 +1,5 @@
 import itertools
 import single
-
 def common_movies_in_group(filtered_df,group):
     """
     Find common movies rated by all users in the group.

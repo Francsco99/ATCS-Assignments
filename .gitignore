@@ -3,3 +3,4 @@ group-reccomandations/recommender_system_test.py
 .DS_Store
 data/plots
 data/csv
+sequential-recommendations/test.py
