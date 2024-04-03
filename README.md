@@ -53,7 +53,7 @@ python webapp.py
 
 This will start a web application on localhost port 5000. Open a web browser and visit [http://localhost:5000](http://localhost:5000) to use the application.
 
-## ToC
+## Index
 
 1. [Installation](#installation)
 2. [Usage](#usage)
@@ -62,5 +62,4 @@ This will start a web application on localhost port 5000. Open a web browser and
      - [Sequential Recommendations (Third Assignment)](#sequential-recommendations-third-assignment)
    - [Web Application](#web-application)
 3. [Installation](#installation)
-
 
