@@ -3,10 +3,10 @@ import single as rs
 import os
 
 """File paths"""
-absPath = os.path.dirname(os.path.abspath(__file__))
+data_dir = os.path.dirname("data")
 
-datasetPath = os.path.join("data","ml-latest-small")
-matricesPath = os.path.join("data","matrices")
+datasetPath = os.path.join(data_dir,"data","ml-latest-small")
+matricesPath = os.path.join(data_dir,"data","matrices")
 userRatingsPath = os.path.join(datasetPath,"ratings.csv")
 moviesPath = os.path.join(datasetPath,"movies.csv")
 PearsonMatrixPath = os.path.join(matricesPath,"pearson.csv")
@@ -48,10 +48,10 @@ if assignment_choice==1:
     print_result(rs.get_user_similarity_from_matrix(user,jac_constr_pearson_matrix,10))
     print("-----------------------------------------------")
     print("Top 10 suggestions using Pearson Correlation Coefficient (Considering 30 similar neighbors)")
-    print_result(rs.top_k_suggestions_matrix(ratings_df,movies_df,pearson_matrix,user,30,10))
+    print_result(rs.top_k_suggestions_matrix_names(ratings_df,movies_df,pearson_matrix,user,30,10))
     print("-----------------------------------------------")
     print("Top 10 suggestions using Jaccard - Pearson Constrained Correlation Coefficient (Considering 30 similar neighbors)")
-    print_result(rs.top_k_suggestions_matrix(ratings_df,movies_df,jac_constr_pearson_matrix,user,30,10))
+    print_result(rs.top_k_suggestions_matrix_names(ratings_df,movies_df,jac_constr_pearson_matrix,user,30,10))
     print("-----------------------------------------------")
 
 elif assignment_choice==2:

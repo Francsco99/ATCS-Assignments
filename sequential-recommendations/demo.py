@@ -1,7 +1,11 @@
 import recommender as rec
 import sequential as seq
+import os
 
-df = rec.open_file('data/ml-latest-small/ratings.csv')
+data_dir = os.path.dirname("data")
+datasetPath = os.path.join(data_dir,"data","ml-latest-small","ratings.csv")
+
+df = rec.open_file(datasetPath)
 group=[]
 group_size=3
 for i in range(group_size):
