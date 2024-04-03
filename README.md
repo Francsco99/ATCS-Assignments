@@ -22,7 +22,7 @@ pip install -r requirements.txt
 
 ### Demo via Command Line
 
-####Group Recommendations (First and Second Assignments)
+#### Group Recommendations (First and Second Assignments)
 
 To run the program for the first and second assignments, navigate to the single-group-recommendations directory:
 
@@ -35,7 +35,7 @@ and execute the demo:
 python demo.py
 ```
 
-####Sequential Recommendations (Third Assignment)
+#### Sequential Recommendations (Third Assignment)
 
 To run the program for the third assignment, navigate to the sequential-recommendations directory:
 
