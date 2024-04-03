@@ -200,7 +200,7 @@ def sequential_recommender(group,iterations,df,top_k):
         users_sat = all_users_satisfactions(group,users_ratings_df,dict(list(group_predictions.items())[:30]))
         all_users_sat[j]=users_sat
         print("Group satisfactions for iter.",j,users_sat)
-        alpha = sigma_median_disagreement(users_sat)
+        alpha = group_disagreement(users_sat)
         print("Group disagreement for iter.",j,alpha)
         print("Updating users ratings...")
         users_ratings_df = update_users_ratings(users_ratings_df,top_k_group_predictions)
