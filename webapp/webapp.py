@@ -1,5 +1,5 @@
 from flask import Flask,render_template, request, jsonify
-import utils as ut
+import recommend_logic as rl
 import os
 
 
@@ -10,9 +10,9 @@ matricesPath = os.path.join("data","matrices")
 userRatingsPath = os.path.join(datasetPath,"ratings.csv")
 moviesPath = os.path.join(datasetPath,"movies.csv")
 
-ratings_data = ut.load_data(userRatingsPath)
-movies_data = ut.load_data(moviesPath)
-users = ut.find_all_users(ratings_data)
+ratings_data = rl.load_data(userRatingsPath)
+movies_data = rl.load_data(moviesPath)
+users = rl.get_all_users(ratings_data)
 
 min_user_id = min(users)
 max_user_id = max(users)
@@ -41,9 +41,23 @@ def recommendations():
     top_k_movies = int(request.args.get('topKMovies'))
     top_k_neighbors = int(request.args.get('topKNeighbors'))
     sim_type = str(request.args.get("similarityType"))
-    sim_matrix = ut.get_sim_matrix(sim_type)
-    predictions=rs.top_k_suggestions_matrix_names(ratings_data,movies_data,sim_matrix,user_id,top_k_neighbors,top_k_movies)
+    sim_matrix = rl.get_sim_matrix(sim_type,matricesPath)
+    predictions=rl.get_recommended_items_names(sim_matrix,top_k_neighbors,ratings_data,movies_data,user_id,top_k_movies)
     return jsonify(predictions)
+
+@app.route('/top_rated_movies')
+def top_rated_movies():
+    user_id = int(request.args.get('userId'))
+    top_movies = rl.top_rated_movies_dict(ratings_data, movies_data, user_id,10)
+    return jsonify(top_movies)
+
+@app.route('/top_similar_users')
+def top_similar_users():
+    user_id = int(request.args.get('userId'))
+    sim_type = str(request.args.get('similarityType'))
+    sim_matrix = rl.get_sim_matrix(sim_type,matricesPath)
+    top_users = rl.get_neighbors_from_matrix(user_id,sim_matrix,10)
+    return jsonify(top_users)
 
 @app.route('/group-recommendations', methods=['GET'])
 def group_recommendations():
@@ -56,29 +70,9 @@ def group_recommendations():
     sim_type = str(request.args.get("similarityType"))
     group_type = str(request.args.get("groupType"))
     weight = float(request.args.get('weight'))
-    sim_matrix = ut.get_sim_matrix(sim_type,matricesPath)
-    if group_type=="average":
-        predictions = rg.top_k_suggestions_average(None,sim_matrix,ratings_data,movies_data,group,top_k_movies,top_k_neighbors)
-    elif group_type=="leastMisery":
-        predictions = rg.top_k_suggestions_least_misery(None,sim_matrix,ratings_data,movies_data,group,top_k_movies,top_k_neighbors)
-    elif group_type=="AverageDisagreement":
-        predictions = rg.top_k_suggestions_avg_disagreement(None,sim_matrix,ratings_data,movies_data,group,top_k_movies,top_k_neighbors,weight)
+    sim_matrix = rl.get_sim_matrix(sim_type,matricesPath)
+    predictions = rl.group_rating_names(movies_data,ratings_data,group,sim_matrix,top_k_neighbors,top_k_movies,group_type,weight)
     return jsonify(predictions)
-
-@app.route('/top_rated_movies')
-def top_rated_movies():
-    user_id = int(request.args.get('userId'))
-    top_movies = rs.top_rated_movies_dict(ratings_data, movies_data, user_id,10)
-    return jsonify(top_movies)
-
-@app.route('/top_similar_users')
-def top_similar_users():
-    user_id = int(request.args.get('userId'))
-    sim_type = str(request.args.get('similarityType'))
-    sim_matrix = get_sim_matrix(sim_type)
-    top_users = rs.get_user_similarity_from_matrix(user_id,sim_matrix,10)
-    return jsonify(top_users)
-    
 
 if __name__ == '__main__':
     app.run(debug=True)
