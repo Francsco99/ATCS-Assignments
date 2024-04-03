@@ -2,10 +2,10 @@
 
 ## Installation
 
-To install the project dependencies, navigate to the project directory and execute the following command:
+Move to the project directory and run:
 
 ```bash
-pip install -r requirements.txt
+python3 -m venv venv; . venv/bin/activate;  pip install -r requirements.txt 
 ```
 
 ## Usage
