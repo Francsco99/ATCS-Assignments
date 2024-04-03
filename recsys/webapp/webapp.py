@@ -4,9 +4,9 @@ import os
 
 
 app = Flask(__name__,static_folder='static')
-data_dir = os.path.dirname("data")
-datasetPath = os.path.join(data_dir,"data","ml-latest-small")
-matricesPath = os.path.join(data_dir,"data","matrices")
+data_dir = os.path.abspath("recsys/data")
+datasetPath = os.path.join(data_dir,"ml-latest-small")
+matricesPath = os.path.join(data_dir,"matrices")
 userRatingsPath = os.path.join(datasetPath,"ratings.csv")
 moviesPath = os.path.join(datasetPath,"movies.csv")
 

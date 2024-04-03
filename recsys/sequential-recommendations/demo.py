@@ -2,8 +2,8 @@ import recommender as rec
 import sequential as seq
 import os
 
-data_dir = os.path.dirname("data")
-datasetPath = os.path.join(data_dir,"data","ml-latest-small","ratings.csv")
+data_dir = os.path.abspath("recsys/data")
+datasetPath = os.path.join(data_dir,"ml-latest-small","ratings.csv")
 
 df = rec.open_file(datasetPath)
 group=[]

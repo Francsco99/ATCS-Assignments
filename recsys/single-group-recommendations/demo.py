@@ -3,10 +3,10 @@ import single as rs
 import os
 
 """File paths"""
-data_dir = os.path.dirname("data")
+data_dir = os.path.abspath("recsys/data")
 
-datasetPath = os.path.join(data_dir,"data","ml-latest-small")
-matricesPath = os.path.join(data_dir,"data","matrices")
+datasetPath = os.path.join(data_dir,"ml-latest-small")
+matricesPath = os.path.join(data_dir,"matrices")
 userRatingsPath = os.path.join(datasetPath,"ratings.csv")
 moviesPath = os.path.join(datasetPath,"movies.csv")
 PearsonMatrixPath = os.path.join(matricesPath,"pearson.csv")
