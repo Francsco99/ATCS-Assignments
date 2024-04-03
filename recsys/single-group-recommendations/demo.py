@@ -3,14 +3,13 @@ import single as rs
 import os
 
 """File paths"""
-data_dir = os.path.abspath("recsys/data")
+data_dir = os.path.abspath("recsys/data/ml-latest-small")
+matrices_dir = os.path.abspath("recsys/data/matrices")
 
-datasetPath = os.path.join(data_dir,"ml-latest-small")
-matricesPath = os.path.join(data_dir,"matrices")
-userRatingsPath = os.path.join(datasetPath,"ratings.csv")
-moviesPath = os.path.join(datasetPath,"movies.csv")
-PearsonMatrixPath = os.path.join(matricesPath,"pearson.csv")
-JaccardConstrPearsonMatrixPath=os.path.join(matricesPath,"jac-constr-pearson.csv")
+userRatingsPath = os.path.join(data_dir,"ratings.csv")
+moviesPath = os.path.join(data_dir,"movies.csv")
+PearsonMatrixPath = os.path.join(matrices_dir,"pearson.csv")
+JaccardConstrPearsonMatrixPath=os.path.join(matrices_dir,"jac-constr-pearson.csv")
 
 """Data loading"""
 ratings_df = rs.load_data(userRatingsPath)
