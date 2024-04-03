@@ -7,3 +7,4 @@ sequential-recommendations/test.py
 .DS_Store
 single-group-recommendations/single-test.py
 sequential-recommendations/find_users.py.DS_Store
+__pycache__/
