@@ -3,11 +3,15 @@ import single as rs
 import os
 
 """File paths"""
-data_dir = os.path.abspath("recsys/data/ml-latest-small")
-matrices_dir = os.path.abspath("recsys/data/matrices")
+data_dir = os.path.dirname(__file__)
+folder = os.path.basename(data_dir)
+base_path = data_dir.replace(folder,"")
 
-userRatingsPath = os.path.join(data_dir,"ratings.csv")
-moviesPath = os.path.join(data_dir,"movies.csv")
+ratings_dir = os.path.join(base_path,"data","ml-latest-small")
+matrices_dir = os.path.join(base_path,"data","matrices")
+
+userRatingsPath = os.path.join(ratings_dir,"ratings.csv")
+moviesPath = os.path.join(ratings_dir,"movies.csv")
 PearsonMatrixPath = os.path.join(matrices_dir,"pearson.csv")
 JaccardConstrPearsonMatrixPath=os.path.join(matrices_dir,"jac-constr-pearson.csv")
 

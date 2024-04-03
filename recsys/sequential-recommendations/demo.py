@@ -2,10 +2,14 @@ import recommender as rec
 import sequential as seq
 import os
 
-data_dir = os.path.abspath("recsys/data")
-datasetPath = os.path.join(data_dir,"ml-latest-small","ratings.csv")
+"""File paths"""
+data_dir = os.path.dirname(__file__)
+folder = os.path.basename(data_dir)
+base_path = data_dir.replace(folder,"")
 
-df = rec.open_file(datasetPath)
+ratings_dir = os.path.join(base_path,"data","ml-latest-small","ratings.csv")
+
+df = rec.open_file(ratings_dir)
 group=[]
 group_size=3
 for i in range(group_size):

@@ -2,13 +2,17 @@ from flask import Flask,render_template, request, jsonify
 import recommend_logic as rl
 import os
 
-
 app = Flask(__name__,static_folder='static')
-data_dir = os.path.abspath("recsys/data")
-datasetPath = os.path.join(data_dir,"ml-latest-small")
-matricesPath = os.path.join(data_dir,"matrices")
-userRatingsPath = os.path.join(datasetPath,"ratings.csv")
-moviesPath = os.path.join(datasetPath,"movies.csv")
+"""File paths"""
+data_dir = os.path.dirname(__file__)
+folder = os.path.basename(data_dir)
+base_path = data_dir.replace(folder,"")
+
+ratings_dir = os.path.join(base_path,"data","ml-latest-small")
+matrices_dir = os.path.join(base_path,"data","matrices")
+
+userRatingsPath = os.path.join(ratings_dir,"ratings.csv")
+moviesPath = os.path.join(ratings_dir,"movies.csv")
 
 ratings_data = rl.load_data(userRatingsPath)
 movies_data = rl.load_data(moviesPath)
@@ -41,7 +45,7 @@ def recommendations():
     top_k_movies = int(request.args.get('topKMovies'))
     top_k_neighbors = int(request.args.get('topKNeighbors'))
     sim_type = str(request.args.get("similarityType"))
-    sim_matrix = rl.get_sim_matrix(sim_type,matricesPath)
+    sim_matrix = rl.get_sim_matrix(sim_type,matrices_dir)
     predictions=rl.get_recommended_items_names(sim_matrix,top_k_neighbors,ratings_data,movies_data,user_id,top_k_movies)
     return jsonify(predictions)
 
@@ -55,7 +59,7 @@ def top_rated_movies():
 def top_similar_users():
     user_id = int(request.args.get('userId'))
     sim_type = str(request.args.get('similarityType'))
-    sim_matrix = rl.get_sim_matrix(sim_type,matricesPath)
+    sim_matrix = rl.get_sim_matrix(sim_type,matrices_dir)
     top_users = rl.get_neighbors_from_matrix(user_id,sim_matrix,10)
     return jsonify(top_users)
 
@@ -70,7 +74,7 @@ def group_recommendations():
     sim_type = str(request.args.get("similarityType"))
     group_type = str(request.args.get("groupType"))
     weight = float(request.args.get('weight'))
-    sim_matrix = rl.get_sim_matrix(sim_type,matricesPath)
+    sim_matrix = rl.get_sim_matrix(sim_type,matrices_dir)
     predictions = rl.group_rating_names(movies_data,ratings_data,group,sim_matrix,top_k_neighbors,top_k_movies,group_type,weight)
     return jsonify(predictions)
 
