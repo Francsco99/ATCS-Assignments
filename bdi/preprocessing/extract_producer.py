@@ -1,14 +1,14 @@
 import os
 import json
 
-monitor_manufacturers = [
+monitor_manufacturers = ["3m","apc","etronix","princeton digital","qnix",
     "aoc", "aopen", "acer", "acer predator", "advantech", "ag neovo", "alienware", 
     "apple", "asus", "asus rog","avocent" "barco", "benq", "belinea", "belkin", "boe", 
     "braun", "chimei innolux", "changhong", "ctx", "coby", "cornea", "corsair", 
-    "curtis", "daewoo", "dell", "double sight","edge10", "e-machines", "eizo", "elo touch",
-    "elo touch solutions","elo", "element", "enermax", "envizex", "faytech", "fujitsu", 
+    "curtis", "daewoo", "dell", "double sight","doublesight", "edge10","eaton", "e-machines", "eizo", "elo touch",
+    "elo touch solutions","elo", "element", "enermax", "envizex", "ergotron","faytech", "fujitsu", 
     "funai", "gigabyte", "goldstar", "grundig", "gvision", "hannspree", "hanns.g", 
-    "handheld", "handheld us","hannsg", "hercules", "hewlett-packard","hewlett packard", "hitachi", "hp", 
+    "handheld", "handheld us","hannsg", "hercules","hewlett", "hewlett-packard","hewlett packard", "hitachi", "hp", 
     "iiyama", "insignia", "intey", "jvc", "key technology corporation", "konka", 
     "ktc", "lacie", "lenovo", "lenovo legion", "lg", "lg ultrawide", "littlebigdisk", 
     "loewe", "logisys", "magnavox", "mag innovision", "mag", "medion", "metz", 
@@ -16,14 +16,25 @@ monitor_manufacturers = [
     "neovo","newstar", "nixeus", "optoma", "packard bell", "panasonic", "philips", "pixo", 
     "planar","planar systems", "polaroid", "polytron", "primax", "proscan", "proton", 
     "protron", "proview", "quasar", "razer", "realistic", "runco", "sampo", 
-    "samsung", "sanyo", "sceptre", "seiki", "sharp", "shuttle", "siemens", 
-    "singer", "skyworth", "sony", "spec research", "supersonic", "tatung", 
+    "samsung", "sanyo", "sceptre", "seiki", "sharp","sunbrite", "shuttle", "siemens", 
+    "singer", "skyworth", "sony", "spec research", "startech","supersonic", "tatung", 
     "telefunken", "tenaus", "totoku", "toshiba", "v7", "verbatim", "vestel", 
     "viewpia", "viewsonic", "vistaquest", "vivitek", "vizio", "wacom", 
-    "westinghouse","wortmann ag", "xiaomi", "zowie", "zyxel"
+    "westinghouse","wortmann ag", "xiaomi", "zowie", "zyxel","packard"
 ]
 
 relevant_labels = ["brand","brand name","manufacturer","publisher"]
+
+manufacturer_mapping = {
+    "hewlett-packard": "hp",
+    "hewlett packard": "hp",
+    "hewlett":"hp",
+    "packard":"hp",
+    "elo touch solutions": "elo",
+    "elo touch": "elo",
+    "lenovo legion": "lenovo",
+    "double sight": "doublesight"
+}
 
 def extract_producer(data):
     for label in relevant_labels:
@@ -32,8 +43,11 @@ def extract_producer(data):
                 value = data[label][0]
             else:
                 value = data[label]
-            # Rimuovi prefissi e spazi extra
-            value = value.strip(": ").strip()
+
+            # Gestisci le varianti del produttore usando la mappa
+            if value.lower() in manufacturer_mapping:
+                return manufacturer_mapping[value.lower()]
+            
             # Estrai la prima parola e mettila in lowercase
             first_word = value.split()[0].lower()
             return first_word
@@ -44,6 +58,8 @@ def extract_producer(data):
         # Cerca una corrispondenza con i produttori nella lista
         for manufacturer in monitor_manufacturers:
             if manufacturer in page_title:
+                if manufacturer.lower() in manufacturer_mapping:
+                    return manufacturer_mapping[manufacturer.lower()]
                 return manufacturer
 
     return None
