@@ -83,13 +83,13 @@ def main():
     
     print(f"Calcolo delle combinazioni da effettuare (su {str(len(clusters))} cluster): {calculate_combinations_for_clusters(clusters)}")
     
-    item2pagetitle_file = "preprocessing/item_to_title.json"
+    item2pagetitle_file = "preprocessing/preprocessed_dataset_final.json"
     item2pagetitle = load_item2pagetitle(item2pagetitle_file)
     
     num_clusters_to_analyze = 1
     matches = pairwise_matching(clusters, item2pagetitle, num_clusters_to_analyze, model, tokenizer)
     
-    output_file = "linkage/matches.json"
+    output_file = "linkage/matches_model_name.json"
     save_matches(matches, output_file)
 
 if __name__ == "__main__":

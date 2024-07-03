@@ -2,7 +2,7 @@ import json
 import pandas as pd
 
 # Carica il file JSON
-with open('linkage/matches.json', 'r') as file:
+with open('linkage/matches_model_name.json', 'r') as file:
     data = json.load(file)
 
 # Inizializza una lista per contenere le coppie
@@ -20,7 +20,7 @@ for key, value in data.items():
 df = pd.DataFrame(pairs, columns=["left_item_spec", "right_item_spec"])
 
 # Salva il DataFrame in un file CSV
-csv_path = 'linkage/item_specs_gpt2.csv'
+csv_path = 'linkage/item_specs_gpt2_model_name.csv'
 df.to_csv(csv_path, index=False)
 
 print(f"File CSV salvato come {csv_path}")
