@@ -27,7 +27,7 @@ networkx==3.3
 numpy==1.26.4
 packaging==24.0
 pandas==2.1.4
-pillow==10.3.0
+pillow==12.2.0
 PuLP==2.8.0
 pyemd==1.0.0
 pyparsing==3.1.2
